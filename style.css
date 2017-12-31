@@ -1,4 +1,12 @@
 body {
     background: rgb(17, 17, 17);
     color: white;
+    font-size: 2em;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+canvas {
+    border: solid .2em #202028;
+    height: 90vh;
 }

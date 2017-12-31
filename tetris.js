@@ -4,7 +4,8 @@ const ctx = canvas.getContext("2d");
 ctx.scale(20, 20);
 
 function arenaSweep() {
-   outer: for (let y = arena.length -1; y > 0; --y) {
+    let rowCount = 1;
+    outer: for (let y = arena.length -1; y > 0; --y) {
         for(let x =0 ; x < arena[y].length; ++x){
             if (arena[y][x] === 0) {
                 continue outer;
@@ -14,6 +15,8 @@ function arenaSweep() {
         arena.unshift(row);
         ++y;
 
+        player.score += rowCount * 10;
+        rowCount *= 2;
     }
 }
 
@@ -127,6 +130,7 @@ function playerDrop() {
             merge(arena, player);
             playerReset();
             arenaSweep();
+            updateScore();
     }
     dropCounter = 0;
 }
@@ -146,6 +150,8 @@ function playerReset() {
     (player.matrix[0].length /2 |0)
     if (collide(arena, player))  {
         arena.forEach(row => row.fill(0));
+        player.score = 0;
+        updateScore();
     }
 }
 
@@ -197,6 +203,11 @@ function update(time = 0) {
     draw();
     requestAnimationFrame(update);
 }
+
+function updateScore() {
+    document.getElementById('score').innerText = player.score;
+}
+
 const colors = [
     null,
     '#FF0D72',
@@ -212,10 +223,11 @@ const arena = createMatrix(12, 20);
 
 const player = {
     pos: {
-        x: 5,
-        y: 5
+        x: 0,
+        y: 0
     },
-    matrix: createPiece('O')
+    matrix: null,
+    score: 0,
 }
 
 document.addEventListener("keydown", e => {
@@ -224,5 +236,6 @@ document.addEventListener("keydown", e => {
     if (e.keyCode == 40) playerDrop();
     if (e.keyCode == 38) playerRotate(1);
 })
-
+playerReset();
+updateScore();
 update();
