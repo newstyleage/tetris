@@ -83,8 +83,28 @@ function playerMove(dir) {
     }
 }
 
-function playerRotate() {
-    console.log('rotate');
+function playerRotate(dir) {
+   rotate(player.matrix, dir);
+}
+
+function rotate(matrix, dir) {
+    for (let y = 0; y < matrix.length; ++y) {
+        for (let x = 0; x < y; ++x) {
+            [
+                matrix[x][y],
+                matrix[y][x]
+            ] =
+            [
+                matrix[y][x],
+                matrix[x][y]
+            ]
+        }
+    }
+    if (dir >0) {
+        matrix.forEach(row => row.reverse());
+    } else {
+        matrix.reverse();
+    }
 }
 
 let dropCounter = 0;
@@ -116,7 +136,7 @@ document.addEventListener("keydown", e => {
     if (e.keyCode == 37) playerMove(-1);
     if (e.keyCode == 39) playerMove(1);
     if (e.keyCode == 40) playerDrop();
-    if (e.keyCode == 38) playerRotate();
+    if (e.keyCode == 38) playerRotate(1);
 })
 
 update();
